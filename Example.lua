@@ -4,8 +4,8 @@
 local UILibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/hm5650/SimpleGui/refs/heads/main/SimpleGui.lua"))()
 local ui = UILibrary.new({
     TitleText = "My Really cool gui", -- change title text
-    Size = UDim2.new(0, 175, 0, 225), -- change length n width
-    Position = UDim2.new(0.5, -140, 0.5, -190), -- change position when UI appears
+    Size = UDim2.new(0, 175, 0, 225), -- change Size
+    Position = UDim2.new(0.5, -140, 0.5, -190), -- change position when UI starts
 })
 
 -- Elements
