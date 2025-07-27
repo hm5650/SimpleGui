@@ -15,9 +15,9 @@ UILibrary.DefaultColors = {
     SeparatorColor = Color3.fromRGB(70, 70, 70),
     TextBoxColor = Color3.fromRGB(45, 45, 45),
     AccentColor = Color3.fromRGB(0, 120, 215),
-    SectionColor = Color3.fromRGB(80, 80, 80),
+    SectionColor = Color3.fromRGB(90, 90, 90),
     LabelColor = Color3.fromRGB(200, 200, 200),
-    SliderColor = Color3.fromRGB(60, 60, 60),
+    SliderColor = Color3.fromRGB(70, 70, 70),
     SliderHandleColor = Color3.fromRGB(100, 100, 100)
 }
 
