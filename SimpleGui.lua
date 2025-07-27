@@ -278,7 +278,7 @@ end
 function UILibrary:AddToggle(config)
     local toggleFrame = Instance.new("Frame")
     toggleFrame.Name = "Toggle_" .. config.Text
-    toggleFrame.Size = UDim2.new(1, -24, 0, 26)
+    toggleFrame.Size = UDim2.new(1, -24, 0, 32)
     toggleFrame.Position = UDim2.new(0, 12, 0, 0)
     toggleFrame.BackgroundTransparency = 1
     toggleFrame.LayoutOrder = #self.Elements + 1
@@ -286,7 +286,7 @@ function UILibrary:AddToggle(config)
     
     local toggleText = Instance.new("TextLabel")
     toggleText.Name = "TextLabel"
-    toggleText.Size = UDim2.new(0.7, 0, 1, 0)
+    toggleText.Size = UDim2.new(0.65, 0, 1, 0)
     toggleText.Position = UDim2.new(0, 0, 0, 0)
     toggleText.BackgroundTransparency = 1
     toggleText.Text = config.Text
@@ -298,14 +298,14 @@ function UILibrary:AddToggle(config)
     
     local toggleButton = Instance.new("TextButton")
     toggleButton.Name = "ToggleButton"
-    toggleButton.Size = UDim2.new(0.25, 0, 0.8, 0)
-    toggleButton.Position = UDim2.new(0.75, 0, 0.1, 0)
+    toggleButton.Size = UDim2.new(0.3, 0, 0.75, 0)
+    toggleButton.Position = UDim2.new(0.68, 0, 0.125, 0)
     toggleButton.BackgroundColor3 = self.Colors.ToggleColor
     toggleButton.BorderSizePixel = 0
     toggleButton.Text = config.Default and "ON" or "OFF"
     toggleButton.TextColor3 = config.Default and self.Colors.ToggleColorON or self.Colors.ToggleColorOFF
     toggleButton.Font = self.Config.Font
-    toggleButton.TextSize = self.Config.TextSize - 1
+    toggleButton.TextSize = self.Config.TextSize
     toggleButton.AutoButtonColor = false
     toggleButton.Parent = toggleFrame
     
