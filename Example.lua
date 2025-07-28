@@ -22,7 +22,7 @@ ui:AddButton({
 
 -- Toggle
 local toggle = ui:AddToggle({
-    Text = "Toggle Sample",
+    Text = "ToggleGetState Sample",
     Default = false, -- change default true Toggled On / False Toggled Off
     Callback = function(state)
         print("Toggle state changed to:", state)
