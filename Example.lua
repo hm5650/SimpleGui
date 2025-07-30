@@ -6,6 +6,13 @@ local ui = UILibrary.new({
     TitleText = "My Really cool gui", -- change title text
     Size = UDim2.new(0, 175, 0, 225), -- change Size
     Position = UDim2.new(0.5, -140, 0.5, -190), -- change position when UI starts
+    TitleHeight = 30,
+    CornerRadius = 6,
+    ElementPadding = 6,
+    Font = Enum.Font.GothamSemibold,
+    TextSize = 12,
+    SectionHeight = 20,
+    UIStrokeThickness 1
 })
 
 -- Elements
