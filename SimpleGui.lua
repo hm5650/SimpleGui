@@ -1,5 +1,3 @@
--- slider, keybind and dropdown are WIP
-
 local UILibrary = {}
 
 -- cool colors
@@ -18,7 +16,8 @@ UILibrary.DefaultColors = {
     SectionColor = Color3.fromRGB(90, 90, 90),
     LabelColor = Color3.fromRGB(200, 200, 200),
     SliderColor = Color3.fromRGB(70, 70, 70),
-    SliderHandleColor = Color3.fromRGB(100, 100, 100)
+    SliderHandleColor = Color3.fromRGB(100, 100, 100),
+    UIStrokeColor = Color3.fromRGB(60, 60, 60) -- Added UI Stroke color
 }
 
 UILibrary.DefaultConfig = {
@@ -31,7 +30,9 @@ UILibrary.DefaultConfig = {
     ElementPadding = 6,
     Font = Enum.Font.GothamSemibold,
     TextSize = 12,
-    SectionHeight = 20
+    SectionHeight = 20,
+    UIStrokeThickness = 1, -- Added UI Stroke thickness
+    UIStrokeEnabled = true -- Added UI Stroke toggle
 }
 
 function UILibrary.new(config)
@@ -76,6 +77,15 @@ function UILibrary:CreateUI()
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, self.Config.CornerRadius)
     corner.Parent = self.MainFrame
+    
+    -- Add UI Stroke to main frame
+    if self.Config.UIStrokeEnabled then
+        local uiStroke = Instance.new("UIStroke")
+        uiStroke.Thickness = self.Config.UIStrokeThickness
+        uiStroke.Color = self.Colors.UIStrokeColor
+        uiStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+        uiStroke.Parent = self.MainFrame
+    end
     
     self.TitleBar = Instance.new("Frame")
     self.TitleBar.Name = "TitleBar"
@@ -252,6 +262,14 @@ function UILibrary:AddButton(config)
     corner.CornerRadius = UDim.new(0, 4)
     corner.Parent = button
     
+    -- Add UI Stroke to button
+    if self.Config.UIStrokeEnabled then
+        local buttonStroke = Instance.new("UIStroke")
+        buttonStroke.Thickness = self.Config.UIStrokeThickness
+        buttonStroke.Color = self.Colors.UIStrokeColor
+        buttonStroke.Parent = button
+    end
+    
     button.MouseEnter:Connect(function()
         button.BackgroundColor3 = self.Colors.ButtonHoverColor
     end)
@@ -312,6 +330,14 @@ function UILibrary:AddToggle(config)
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 12)
     corner.Parent = toggleButton
+    
+    -- Add UI Stroke to toggle button
+    if self.Config.UIStrokeEnabled then
+        local toggleStroke = Instance.new("UIStroke")
+        toggleStroke.Thickness = self.Config.UIStrokeThickness
+        toggleStroke.Color = self.Colors.UIStrokeColor
+        toggleStroke.Parent = toggleButton
+    end
     
     local state = config.Default or false
     
@@ -384,6 +410,14 @@ function UILibrary:AddTextBox(config)
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 4)
     corner.Parent = textBox
+    
+    -- Add UI Stroke to text box
+    if self.Config.UIStrokeEnabled then
+        local textBoxStroke = Instance.new("UIStroke")
+        textBoxStroke.Thickness = self.Config.UIStrokeThickness
+        textBoxStroke.Color = self.Colors.UIStrokeColor
+        textBoxStroke.Parent = textBox
+    end
     
     if config.Callback then
         textBox.FocusLost:Connect(function(enterPressed)
@@ -469,15 +503,33 @@ function UILibrary:AddSlider(config)
     handleCorner.CornerRadius = UDim.new(1, 0)
     handleCorner.Parent = sliderHandle
     
+    -- Add UI Stroke to slider handle
+    if self.Config.UIStrokeEnabled then
+        local handleStroke = Instance.new("UIStroke")
+        handleStroke.Thickness = self.Config.UIStrokeThickness
+        handleStroke.Color = self.Colors.UIStrokeColor
+        handleStroke.Parent = sliderHandle
+    end
+    
     local dragging = false
     local currentValue = config.Default
     
     local function updateSlider(value)
         value = math.clamp(value, config.Min, config.Max)
         currentValue = value
-        sliderFill.Size = UDim2.new((value - config.Min) / (config.Max - config.Min), 0, 1, 0)
-        sliderHandle.Position = UDim2.new(sliderFill.Size.X.Scale, -8, 0.5, -8)
-        sliderText.Text = config.Text .. ": " .. math.floor(value)
+        local fillSize = (value - config.Min) / (config.Max - config.Min)
+        sliderFill.Size = UDim2.new(fillSize, 0, 1, 0)
+        sliderHandle.Position = UDim2.new(fillSize, -8, 0.5, -8)
+        
+        -- Format number based on whether it's a whole number
+        local displayValue
+        if config.Round and config.Round > 0 then
+            displayValue = tonumber(string.format("%."..config.Round.."f", value))
+        else
+            displayValue = math.floor(value)
+        end
+        
+        sliderText.Text = config.Text .. ": " .. displayValue
         
         if config.Callback then
             config.Callback(value)
@@ -500,13 +552,22 @@ function UILibrary:AddSlider(config)
             local trackPos = sliderTrack.AbsolutePosition
             local trackSize = sliderTrack.AbsoluteSize
             local relativeX = (mousePos.X - trackPos.X) / trackSize.X
-            local value = config.Min + (config.Max - config.Min) * relativeX
+            local value = config.Min + (config.Max - config.Min) * math.clamp(relativeX, 0, 1)
             updateSlider(value)
         end
     end)
     
+    -- Add click-to-set functionality for the track
+    sliderTrack.MouseButton1Down:Connect(function(x, y)
+        local trackPos = sliderTrack.AbsolutePosition
+        local trackSize = sliderTrack.AbsoluteSize
+        local relativeX = (x - trackPos.X) / trackSize.X
+        local value = config.Min + (config.Max - config.Min) * math.clamp(relativeX, 0, 1)
+        updateSlider(value)
+    end)
+    
     table.insert(self.Elements, sliderFrame)
-    return sliderFrame
+    return sliderFrame, function() return currentValue end
 end
 
 function UILibrary:Destroy()
