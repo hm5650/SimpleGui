@@ -17,9 +17,10 @@ UILibrary.DefaultColors = {
     LabelColor = Color3.fromRGB(200, 200, 200),
     SliderColor = Color3.fromRGB(70, 70, 70),
     SliderHandleColor = Color3.fromRGB(100, 100, 100),
-    UIStrokeColor = Color3.fromRGB(60, 60, 60) -- Added UI Stroke color
+    UIStrokeColor = Color3.fromRGB(60, 60, 60)
 }
 
+-- Config stuff
 UILibrary.DefaultConfig = {
     Title = "UI Library",
     TitleText = "UI Library",
@@ -31,8 +32,8 @@ UILibrary.DefaultConfig = {
     Font = Enum.Font.GothamSemibold,
     TextSize = 12,
     SectionHeight = 20,
-    UIStrokeThickness = 1, -- Added UI Stroke thickness
-    UIStrokeEnabled = true -- Added UI Stroke toggle
+    UIStrokeThickness = 1,
+    UIStrokeEnabled = true
 }
 
 function UILibrary.new(config)
@@ -503,7 +504,6 @@ function UILibrary:AddSlider(config)
     handleCorner.CornerRadius = UDim.new(1, 0)
     handleCorner.Parent = sliderHandle
     
-    -- Add UI Stroke to slider handle
     if self.Config.UIStrokeEnabled then
         local handleStroke = Instance.new("UIStroke")
         handleStroke.Thickness = self.Config.UIStrokeThickness
@@ -521,7 +521,6 @@ function UILibrary:AddSlider(config)
         sliderFill.Size = UDim2.new(fillSize, 0, 1, 0)
         sliderHandle.Position = UDim2.new(fillSize, -8, 0.5, -8)
         
-        -- Format number based on whether it's a whole number
         local displayValue
         if config.Round and config.Round > 0 then
             displayValue = tonumber(string.format("%."..config.Round.."f", value))
@@ -557,7 +556,6 @@ function UILibrary:AddSlider(config)
         end
     end)
     
-    -- Add click-to-set functionality for the track
     sliderTrack.MouseButton1Down:Connect(function(x, y)
         local trackPos = sliderTrack.AbsolutePosition
         local trackSize = sliderTrack.AbsoluteSize
