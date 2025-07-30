@@ -12,7 +12,7 @@ local ui = UILibrary.new({
     Font = Enum.Font.GothamSemibold,
     TextSize = 12,
     SectionHeight = 20,
-    UIStrokeThickness 1
+    UIStrokeThickness = 1
 })
 
 -- Elements
